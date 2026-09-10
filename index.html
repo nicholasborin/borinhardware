@@ -66,14 +66,14 @@
   --duration-normal: 300ms;
   --duration-slow: 700ms;
 
-  --navbar-h: 56px;
+  --navbar-h: 108px;
 }
 
 /* =========================================================
    RESET
 ========================================================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--navbar-h); -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--font-text);
   color: var(--color-primary);
@@ -205,6 +205,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   align-items: center;
   justify-content: space-between;
   height: var(--navbar-h);
+  position: relative;
 }
 .logo {
   display: flex;
@@ -217,8 +218,13 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   white-space: nowrap;
   flex-shrink: 0;
 }
+.navbar__inner .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .logo-mark {
-  width: 44px; height: 29px;
+  width: 190px; height: 90px;
   border-radius: 7px;
   object-fit: contain;
   object-position: center;
@@ -251,6 +257,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   width: 40px; height: 40px;
   position: relative;
   flex-shrink: 0;
+  margin-left: auto;
 }
 .nav-toggle span {
   position: absolute; left: 8px; right: 8px; height: 2px;
@@ -345,8 +352,8 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   gap: var(--space-2);
 }
 .stat__icon {
-  width: 36px;
-  height: 36px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: rgba(0,113,227,0.1);
   display: flex;
@@ -856,7 +863,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   .section-head { margin-bottom: var(--space-9); }
 
   .logo { font-size: 19px; }
-  .logo-mark { width: 48px; height: 32px; }
+  .logo-mark { width: 190px; height: 90px; }
 
   .hero { padding-top: calc(var(--navbar-h) + var(--space-11)); padding-bottom: var(--space-9); }
   .hero p.lead { margin-bottom: var(--space-7); }
@@ -915,6 +922,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 }
 
 @media (min-width: 1200px) {
+  .navbar__inner .logo { position: static; transform: none; }
   .nav-links { display: flex; align-items: center; justify-content: center; gap: var(--space-6); flex: 1; }
   .nav-cta { display: flex; align-items: center; gap: var(--space-4); flex-shrink: 0; }
   .nav-toggle { display: none; }
@@ -931,7 +939,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 ========================================================= -->
 <header class="navbar" id="navbar">
   <div class="wrap navbar__inner">
-    <a href="#top" class="logo"><img class="logo-mark" src="assets/logonova.png" alt="" width="48" height="32">Borin Hardware</a>
+    <a href="#top" class="logo"><img class="logo-mark" src="assets/logofull.png" alt="Borin Hardware" width="190" height="90"></a>
     <nav class="nav-links" aria-label="Navegação principal">
       <a href="#pcs-montados">Catálogo</a>
       <a href="#beneficios">Benefícios</a>
@@ -940,9 +948,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <a href="#depoimentos">Depoimentos</a>
       <a href="#faq">Dúvidas</a>
     </nav>
-    <div class="nav-cta">
-      <a href="#orcamento" class="btn btn--primary btn--sm">Pedir orçamento</a>
-    </div>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
       <span></span><span></span>
     </button>
@@ -954,7 +959,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     <a href="#assistencia">Upgrades e assistência</a>
     <a href="#depoimentos">Depoimentos</a>
     <a href="#faq">Dúvidas</a>
-    <a href="#orcamento" class="btn btn--primary btn--block">Pedir orçamento</a>
   </nav>
 </header>
 
@@ -967,14 +971,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     <p class="lead js-hero-item">Consultoria e montagem de PC's Gamer e de Alto desempenho sob medida, com escolha de peças pensada pro seu orçamento e uso real.</p>
     <div class="hero__ctas js-hero-item">
       <a href="#orcamento" class="btn btn--primary">Montar meu PC</a>
-      <a href="#pcs-montados" class="btn btn--ghost">Ver PCs montados</a>
-    </div>
-    <div class="hero__trust js-hero-item">
-      <span>Dezenas de máquinas entregues</span>
-      <span class="dot">·</span>
-      <span>10 anos de experiência</span>
-      <span class="dot">·</span>
-      <span>Atendimento em todo o Brasil</span>
+      <a href="#pcs-montados" class="btn btn--ghost">Ver configurações</a>
     </div>
   </div>
 </section>
@@ -985,22 +982,22 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 <section class="stats-strip">
   <div class="wrap">
     <div class="stat">
-      <div class="stat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#0071E3" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#0071E3" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="stat__value">Dezenas</div>
       <div class="stat__label">de máquinas entregues</div>
     </div>
     <div class="stat">
-      <div class="stat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#0071E3" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#0071E3" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="stat__value">10 anos</div>
       <div class="stat__label">de experiência</div>
     </div>
     <div class="stat">
-      <div class="stat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="stat__value">100%</div>
       <div class="stat__label">dos PCs testados antes da entrega</div>
     </div>
     <div class="stat">
-      <div class="stat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg></div>
       <div class="stat__value">1 ano</div>
       <div class="stat__label">de suporte técnico</div>
     </div>
@@ -1025,7 +1022,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <div class="pc-card__body">
             <h3>PC#128</h3>
             <p>AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB.</p>
-            <a class="btn btn--ghost pc-choice" href="#orcamento" data-pc="Ryzen 9 + RTX 5070">Montar um igual</a>
+            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#128" data-specs="AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
           </div>
         </article>
         <article class="pc-card reveal">
@@ -1035,7 +1032,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <div class="pc-card__body">
             <h3>PC#136</h3>
             <p>AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB.</p>
-            <a class="btn btn--ghost pc-choice" href="#orcamento" data-pc="Performance Clean">Montar um igual</a>
+            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
           </div>
         </article>
         <article class="pc-card reveal">
@@ -1045,9 +1042,18 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <div class="pc-card__body">
             <h3>PC#138</h3>
             <p>AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB.</p>
-            <a class="btn btn--ghost pc-choice" href="#orcamento" data-pc="High End">Montar um igual</a>
+            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#138" data-specs="AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB" target="_blank" rel="noopener">Montar um igual</a>
           </div>
         </article>
+        <article class="pc-card reveal">
+          <div class="pc-art pc-art--photo">
+            <img src="assets/pc4.png" alt="PC montado com design clean, ideal para produtividade e criação de conteúdo" loading="lazy" decoding="async">
+          </div>
+          <div class="pc-card__body">
+            <h3>PC#86</h3>
+            <p>AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB.</p>
+            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
+          </div>
       </div>
       <button class="pcs-arrow pcs-arrow--next" type="button" aria-label="Ver próximo PC">&#8250;</button>
     </div>
@@ -1060,7 +1066,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 <section class="section" id="beneficios">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>Por que montar com a Borin Hardware</h2>
+      <h2>Por que montar seu PC com a Borin Hardware</h2>
       <p class="lead">Você conta o que precisa e recebe orientação para montar uma máquina coerente, bem montada e pronta para o seu uso.</p>
     </div>
     <div class="benefits-grid">
@@ -1069,28 +1075,28 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#0071E3" stroke-width="2"/></svg>
         </div>
         <h4>Consultoria personalizada</h4>
-        <p>Ajudamos você a definir a configuração ideal para seus jogos, trabalho ou criação de conteúdo.</p>
+        <p>Definição da configuração ideal para seus jogos, trabalho ou criação de conteúdo.</p>
       </div>
       <div class="benefit-card reveal">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="#0071E3" stroke-width="2"/></svg>
         </div>
-        <h4>Ajuda na compra das peças</h4>
-        <p>Orientamos você a encontrar os componentes nas principais lojas de hardware e comprar com mais segurança.</p>
+        <h4>Cotação das peças</h4>
+        <p>Pesquisa dos componentes nas principais lojas de hardware, buscando boas opções de preço, qualidade e disponibilidade.</p>
       </div>
       <div class="benefit-card reveal">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#0071E3" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-        <h4>Montado e pronto para uso</h4>
-        <p>Checklist de testes, Windows licenciado, atualizações e drivers instalados antes da entrega.</p>
+        <h4>Montagem e preparação</h4>
+        <p>Montagem completa do PC, com testes, Windows licenciado, atualizações e drivers instalados antes da entrega.</p>
       </div>
       <div class="benefit-card reveal">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
         <h4>Suporte</h4>
-        <p>Suporte técnico para orientações e identificação de falhas por 1 ano.</p>
+        <p>Suporte técnico para orientações, dúvidas e identificação de possíveis falhas durante 1 ano.</p>
       </div>
     </div>
     <div class="delivery-grid">
@@ -1105,15 +1111,15 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h4>Seguro do transporte</h4>
-        <p>Quando enviado por transportadora, o PC segue com seguro no valor total de todas as peças.</p>
+        <h4>Seguro no transporte</h4>
+        <p>Quando enviado por transportadora, o PC segue com seguro sobre o valor total das peças.</p>
       </div>
       <div class="benefit-card reveal">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="#0071E3" stroke-width="2"/></svg>
         </div>
         <h4>Entrega local</h4>
-        <p>Em Bauru e região, levamos o PC montado até você e ajudamos nas orientações iniciais.</p>
+        <p>Em Bauru e região, entrega do PC montado até você, com orientações iniciais.</p>
       </div>
     </div>
   </div>
@@ -1136,28 +1142,28 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       </div>
       <div class="process-step reveal">
         <span class="process-step__num">2</span>
-        <h4>Montamos a configuração com você</h4>
-        <p>Montamos uma configuração junto com você, remotamente, pensando no seu orçamento e uso real.</p>
+        <h4>Definição da configuração</h4>
+        <p>A partir do que você procura, definimos os componentes que melhor atendem ao seu projeto e orçamento.</p>
       </div>
       <div class="process-step reveal">
         <span class="process-step__num">3</span>
         <h4>Compra das peças</h4>
-        <p>Depois que definimos a configuração, orientamos a compra das peças. Elas podem ser entregues pessoalmente ou enviadas diretamente das lojas para o nosso endereço.</p>
+        <p>Após definirmos a configuração, indicamos as melhores opções de compra nas principais lojas de hardware.</p>
       </div>
       <div class="process-step reveal">
         <span class="process-step__num">4</span>
-        <h4>Montamos e fazemos os testes</h4>
-        <p>Fazemos a montagem, o checklist de testes e preparamos o PC para ser entregue pronto para uso.</p>
+        <h4>Montagem e testes</h4>
+        <p>Com todas as peças em mãos, realizamos a montagem, os testes e a preparação do PC para a entrega.</p>
       </div>
       <div class="process-step reveal">
         <span class="process-step__num">5</span>
         <h4>Entrega em Bauru e região</h4>
-        <p>Entregamos a máquina pessoalmente e ajudamos com as orientações iniciais na casa do cliente.</p>
+        <p>Entregamos o PC pessoalmente, com tudo preparado para você começar a utilizá-lo.</p>
       </div>
       <div class="process-step reveal">
         <span class="process-step__num">6</span>
         <h4>Envio para todo o Brasil</h4>
-        <p>Enviamos o PC por transportadora, com seguro no valor total de todas as peças.</p>
+        <p>Para outras regiões, enviamos o PC por transportadora, com seguro sobre o valor total das peças.</p>
       </div>
     </div>
   </div>
@@ -1183,7 +1189,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <li>Instalação de water cooler</li>
           <li>Avaliação de compatibilidade</li>
         </ul>
-        <a href="#orcamento" class="btn btn--ghost btn--block">Planejar meu upgrade</a>
+        <a href="https://wa.me/5514997855014?text=Ol%C3%A1%2C%20Borin%20Hardware!%20Quero%20planejar%20um%20upgrade%20no%20meu%20PC%20(troca%20de%20placa%20de%20v%C3%ADdeo%2C%20SSD%2C%20water%20cooler%20ou%20avalia%C3%A7%C3%A3o%20de%20compatibilidade)." class="btn btn--ghost btn--block" target="_blank" rel="noopener">Planejar meu upgrade</a>
       </div>
       <div class="config-card config-card--featured reveal">
         <span class="config-card__badge">Manutenção</span>
@@ -1195,7 +1201,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <li>Atualizações e drivers</li>
           <li>Instalação dos principais programas</li>
         </ul>
-        <a href="#orcamento" class="btn btn--primary btn--block">Quero fazer manutenção</a>
+        <a href="https://wa.me/5514997855014?text=Ol%C3%A1%2C%20Borin%20Hardware!%20Quero%20fazer%20manuten%C3%A7%C3%A3o%20no%20meu%20PC%20(formata%C3%A7%C3%A3o%2C%20limpeza%20interna%2C%20atualiza%C3%A7%C3%B5es%20e%20instala%C3%A7%C3%A3o%20de%20programas)." class="btn btn--primary btn--block" target="_blank" rel="noopener">Quero fazer manutenção</a>
       </div>
       <div class="config-card reveal">
         <span class="config-card__badge">Acompanhamento</span>
@@ -1207,7 +1213,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           <li>Instalação de componentes</li>
           <li>Orientação sobre os próximos passos</li>
         </ul>
-        <a href="#orcamento" class="btn btn--ghost btn--block">Falar com a Borin</a>
+        <a href="https://wa.me/5514997855014?text=Ol%C3%A1%2C%20Borin%20Hardware!%20Preciso%20de%20assist%C3%AAncia%20t%C3%A9cnica%20no%20meu%20PC%20(identifica%C3%A7%C3%A3o%20de%20falhas%2C%20componentes%20queimados%20ou%20instala%C3%A7%C3%A3o%20de%20pe%C3%A7as)." class="btn btn--ghost btn--block" target="_blank" rel="noopener">Falar com a Borin</a>
       </div>
     </div>
   </div>
@@ -1312,7 +1318,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
           Vocês ajudam a comprar as peças?
           <span class="faq-item__icon"></span>
         </button>
-        <div class="faq-item__a"><p>Sim. Oferecemos consultoria personalizada e orientamos você na escolha e na compra dos componentes nas principais lojas de hardware.</p></div>
+        <div class="faq-item__a"><p>Sim. Oferecemos consultoria personalizada e orientamos você na escolha e na compra dos componentes nas principais lojas de hardware do mercado.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-item__q" aria-expanded="false">
@@ -1340,11 +1346,11 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     <div class="cta-final__grid">
       <div class="cta-final__copy reveal">
         <h2>Peça seu orçamento sem compromisso</h2>
-        <p class="lead">Conte o que você joga e quanto pretende investir. Em até 24 horas você recebe uma configuração pensada para você, esteja onde estiver no Brasil.</p>
+        <p class="lead">Conte o que você joga e quanto pretende investir. Em até 24 horas você recebe uma configuração pensada para você.</p>
         <ul class="cta-final__list">
           <li>Resposta em até 24 horas</li>
           <li>Orientação personalizada para seu projeto</li>
-          <li>Atendimento em todo o Brasil pelo WhatsApp</li>
+          <li>Atendimento pelo WhatsApp</li>
         </ul>
       </div>
       <div class="form-card reveal">
@@ -1378,12 +1384,12 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
             </select>
           </div>
           <input type="hidden" id="pcEscolhido" name="pc_escolhido" value="Ainda não escolhi um modelo">
-          <button type="submit" class="btn btn--primary btn--block">Quero meu orçamento</button>
+          <button type="submit" class="btn btn--primary btn--block">Entrar em contato</button>
           <p class="form-note">Ao enviar, o WhatsApp abrirá uma mensagem com suas respostas.</p>
         </form>
         <div class="form-success" id="formSuccess">
           <div class="form-success__icon">✓</div>
-          <h4>Pedido preparado</h4>
+          <h4>Solicitação enviada</h4>
           <p>O WhatsApp foi aberto com suas respostas. É só enviar a mensagem para falar com a Borin Hardware.</p>
         </div>
       </div>
@@ -1398,7 +1404,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   <div class="wrap">
     <div class="footer__top">
       <div class="footer__brand">
-        <a href="#top" class="logo"><img class="logo-mark" src="assets/logonova.png" alt="" width="48" height="32" loading="lazy" decoding="async">Borin Hardware</a>
         <p>Consultoria, montagem de PCs sob medida e suporte via WhatsApp antes e depois da entrega.</p>
       </div>
       <div class="footer__cols">
@@ -1517,6 +1522,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     pcGrid.addEventListener('touchend', resumeCarousel, { passive: true });
     pcGrid.addEventListener('pointerdown', function (event) {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
+      if (event.target.closest('a, button')) return;
       dragging = true;
       dragStart = event.clientX;
       dragScroll = pcGrid.scrollLeft;
@@ -1543,9 +1549,19 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   var form = document.getElementById('leadForm');
   var success = document.getElementById('formSuccess');
   var pcEscolhido = document.getElementById('pcEscolhido');
-  document.querySelectorAll('.pc-choice').forEach(function (choice) {
+  document.querySelectorAll('.pc-choice-wa').forEach(function (choice) {
     choice.addEventListener('click', function () {
-      pcEscolhido.value = choice.getAttribute('data-pc');
+      var pcNome = choice.getAttribute('data-pc');
+      var pcSpecs = choice.getAttribute('data-specs');
+      var message = [
+        'Olá, Borin Hardware! Quero solicitar um orçamento.',
+        '',
+        'Tenho interesse no ' + pcNome + ' com a mesma configuração:',
+        pcSpecs
+      ].join('\n');
+      choice.href = 'https://wa.me/5514997855014?text=' + encodeURIComponent(message);
+      // sem preventDefault: o navegador segue o link normalmente (target="_blank"),
+      // o que evita o bloqueio de pop-up que window.open() costuma sofrer.
     });
   });
   form.addEventListener('submit', function (e) {
