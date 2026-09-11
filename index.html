@@ -1488,20 +1488,9 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   /* ---- PCs carousel ---- */
   var pcGrid = document.querySelector('.pcs-grid');
   if (pcGrid && !reduceMotion) {
-    var carouselPaused = false;
     var dragging = false;
     var dragStart = 0;
     var dragScroll = 0;
-    var moveCarousel = function () {
-      if (carouselPaused) return;
-      var card = pcGrid.querySelector('.pc-card');
-      if (!card) return;
-      var step = card.getBoundingClientRect().width + parseFloat(getComputedStyle(pcGrid).gap);
-      var atEnd = pcGrid.scrollLeft + pcGrid.clientWidth >= pcGrid.scrollWidth - 4;
-      pcGrid.scrollTo({ left: atEnd ? 0 : pcGrid.scrollLeft + step, behavior: 'smooth' });
-    };
-    var pauseCarousel = function () { carouselPaused = true; };
-    var resumeCarousel = function () { carouselPaused = false; };
     var scrollCarousel = function (direction) {
       var card = pcGrid.querySelector('.pc-card');
       if (!card) return;
@@ -1512,12 +1501,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     var nextButton = document.querySelector('.pcs-arrow--next');
     if (previousButton) previousButton.addEventListener('click', function () { scrollCarousel(-1); });
     if (nextButton) nextButton.addEventListener('click', function () { scrollCarousel(1); });
-    pcGrid.addEventListener('mouseenter', pauseCarousel);
-    pcGrid.addEventListener('mouseleave', resumeCarousel);
-    pcGrid.addEventListener('focusin', pauseCarousel);
-    pcGrid.addEventListener('focusout', resumeCarousel);
-    pcGrid.addEventListener('touchstart', pauseCarousel, { passive: true });
-    pcGrid.addEventListener('touchend', resumeCarousel, { passive: true });
     pcGrid.addEventListener('pointerdown', function (event) {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
       if (event.target.closest('a, button')) return;
@@ -1525,7 +1508,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       dragStart = event.clientX;
       dragScroll = pcGrid.scrollLeft;
       pcGrid.setPointerCapture(event.pointerId);
-      pauseCarousel();
     });
     pcGrid.addEventListener('pointermove', function (event) {
       if (!dragging) return;
@@ -1534,13 +1516,10 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     });
     pcGrid.addEventListener('pointerup', function () {
       dragging = false;
-      resumeCarousel();
     });
     pcGrid.addEventListener('pointercancel', function () {
       dragging = false;
-      resumeCarousel();
     });
-    window.setInterval(moveCarousel, 4200);
   }
 
   /* ---- Lead form ---- */
