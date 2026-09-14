@@ -487,24 +487,13 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 ========================================================= */
 .pcs-showcase { background: var(--color-surface); }
 .pcs-showcase .section-head { margin-bottom: var(--space-6); }
-.pcs-carousel { position: relative; }
-.pcs-grid {
-  display: flex;
-  align-items: stretch;
-  gap: var(--space-4);
-  overflow-x: auto;
-  padding: var(--space-2) 0 var(--space-4);
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  cursor: grab;
-  touch-action: pan-x;
+.pcs-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  align-items: start;
 }
-.pcs-grid::-webkit-scrollbar { display: none; }
-.pcs-grid:active { cursor: grabbing; }
 .pc-card {
-  flex: 0 0 min(520px, 82vw);
-  min-width: 0;
-  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   background: var(--color-background);
@@ -527,26 +516,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   object-position: center;
   background: transparent;
 }
-.pcs-arrow {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--color-background);
-  color: var(--color-primary);
-  box-shadow: var(--shadow-hover);
-  font-size: 20px;
-  line-height: 1;
-  transform: translateY(-50%);
-}
-.pcs-arrow--prev { left: 4px; }
-.pcs-arrow--next { right: 4px; }
-.pcs-arrow:hover { background: var(--color-accent); color: var(--color-inverse); }
 .pc-card__body {
   display: flex;
   flex: 1;
@@ -556,6 +525,48 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 .pc-card h3 { font-size: var(--text-h4); margin-bottom: var(--space-2); }
 .pc-card p { font-size: var(--text-body-sm); margin-bottom: var(--space-5); }
 .pc-card .btn { width: 100%; margin-top: auto; }
+
+.pcs-spec-list__head {
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted, #6b7280);
+  margin-bottom: var(--space-4);
+}
+.pcs-spec-list ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.pc-spec-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-background);
+  border: 1px solid var(--color-surface-strong);
+  border-radius: var(--radius-lg);
+  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+}
+.pc-spec-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.pc-spec-item__icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md, 12px);
+  background: linear-gradient(145deg, #17191d, #2f4a64);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pc-spec-item__body { flex: 1; min-width: 0; }
+.pc-spec-item__body h4 { font-size: var(--text-h5, 1rem); margin-bottom: 2px; }
+.pc-spec-item__body p { font-size: var(--text-body-sm); color: var(--color-text-muted, #6b7280); margin-bottom: var(--space-2); }
+.pc-spec-item__link { font-size: var(--text-body-sm); font-weight: 600; color: var(--color-primary); text-decoration: none; }
+.pc-spec-item__link:hover { text-decoration: underline; }
+
+@media (min-width: 860px) {
+  .pcs-showcase-grid { grid-template-columns: 1.1fr 0.9fr; }
+}
 
 /* =========================================================
    BENEFITS
@@ -981,9 +992,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   .stats-strip .wrap { grid-template-columns: repeat(4, 1fr); gap: var(--space-5); padding-top: var(--space-7); padding-bottom: var(--space-7); }
 
   .pcs-showcase .section-head { margin-bottom: var(--space-7); }
-  .pcs-grid { gap: var(--space-5); }
   .pc-art { min-height: 210px; }
-  .pcs-arrow { width: 40px; height: 40px; font-size: 24px; }
 
   .benefits-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
   .benefit-card { min-height: 176px; padding: var(--space-6); }
@@ -1013,10 +1022,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 
 @media (min-width: 1024px) {
   .section { padding: var(--space-11) 0; }
-
-  .pc-card { flex-basis: calc((100% - (var(--space-5) * 2)) / 3); }
-  .pcs-arrow--prev { left: -20px; }
-  .pcs-arrow--next { right: -20px; }
 
   .benefits-grid { grid-template-columns: repeat(4, 1fr); }
   .delivery-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1121,50 +1126,62 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <h2>Configurações que já montamos</h2>
       <p class="lead">PCs Gamer e de alta performance montados pela Borin Hardware em Bauru-SP.</p>
     </div>
-    <div class="pcs-carousel">
-      <button class="pcs-arrow pcs-arrow--prev" type="button" aria-label="Ver PC anterior">&#8249;</button>
-      <div class="pcs-grid">
-        <article class="pc-card reveal">
-          <div class="pc-art pc-art--photo">
-            <img src="assets/pc1.png" alt="PC Gamer branco montado pela Borin Hardware em Bauru, com iluminação branca e placa de vídeo RTX 5070" loading="lazy" decoding="async">
-          </div>
-          <div class="pc-card__body">
-            <h3>PC#128</h3>
-            <p>AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB.</p>
-            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#128" data-specs="AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
-          </div>
-        </article>
-        <article class="pc-card reveal">
-          <div class="pc-art pc-art--photo">
-            <img src="assets/pc2.png" alt="PC de alta performance montado com design clean, ideal para produtividade e criação de conteúdo" loading="lazy" decoding="async">
-          </div>
-          <div class="pc-card__body">
-            <h3>PC#136</h3>
-            <p>AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB.</p>
-            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
-          </div>
-        </article>
-        <article class="pc-card reveal">
-          <div class="pc-art pc-art--photo">
-            <img src="assets/pc3.png" alt="PC Gamer de alta performance montado em Bauru, com iluminação forte e ótima refrigeração" loading="lazy" decoding="async">
-          </div>
-          <div class="pc-card__body">
-            <h3>PC#138</h3>
-            <p>AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB.</p>
-            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#138" data-specs="AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB" target="_blank" rel="noopener">Montar um igual</a>
-          </div>
-        </article>
-        <article class="pc-card reveal">
-          <div class="pc-art pc-art--photo">
-            <img src="assets/pc4.png" alt="PC Gamer montado com design clean, ideal para produtividade e criação de conteúdo" loading="lazy" decoding="async">
-          </div>
-          <div class="pc-card__body">
-            <h3>PC#86</h3>
-            <p>AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB.</p>
-            <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
-          </div>
+    <div class="pcs-showcase-grid">
+      <article class="pc-card reveal">
+        <div class="pc-art pc-art--photo">
+          <img src="assets/pc1.png" alt="PC Gamer branco montado pela Borin Hardware em Bauru, com iluminação branca e placa de vídeo RTX 5070" loading="lazy" decoding="async">
+        </div>
+        <div class="pc-card__body">
+          <h3>PC#137</h3>
+          <p>AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB.</p>
+          <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#128" data-specs="AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
+        </div>
+      </article>
+
+      <div class="pcs-spec-list reveal">
+        <p class="pcs-spec-list__head">Outras configurações recentes</p>
+        <ul>
+          <li class="pc-spec-item">
+            <div class="pc-spec-item__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="pc-spec-item__body">
+              <h4>PC#136</h4>
+              <p>AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB</p>
+              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
+            </div>
+          </li>
+          <li class="pc-spec-item">
+            <div class="pc-spec-item__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="pc-spec-item__body">
+              <h4>PC#135</h4>
+              <p>AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB</p>
+              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#138" data-specs="AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB" target="_blank" rel="noopener">Montar um igual</a>
+            </div>
+          </li>
+          <li class="pc-spec-item">
+            <div class="pc-spec-item__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="pc-spec-item__body">
+              <h4>PC#134</h4>
+              <p>AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB</p>
+              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#86" data-specs="AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB" target="_blank" rel="noopener">Montar um igual</a>
+            </div>
+          </li><li class="pc-spec-item">
+            <div class="pc-spec-item__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="pc-spec-item__body">
+              <h4>PC#133</h4>
+              <p>AMD Ryzen 5 5600 | Memória 16GB | RX 7600 8GB</p>
+              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#86" data-specs="AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB" target="_blank" rel="noopener">Montar um igual</a>
+            </div>
+          </li>
+        </ul>
       </div>
-      <button class="pcs-arrow pcs-arrow--next" type="button" aria-label="Ver próximo PC">&#8250;</button>
     </div>
   </div>
 </section>
@@ -1603,43 +1620,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       a.style.maxHeight = !isOpen ? a.scrollHeight + 'px' : null;
     });
   });
-
-  /* ---- PCs carousel ---- */
-  var pcGrid = document.querySelector('.pcs-grid');
-  if (pcGrid && !reduceMotion) {
-    var dragging = false;
-    var dragStart = 0;
-    var dragScroll = 0;
-    var scrollCarousel = function (direction) {
-      var card = pcGrid.querySelector('.pc-card');
-      if (!card) return;
-      var step = card.getBoundingClientRect().width + parseFloat(getComputedStyle(pcGrid).gap);
-      pcGrid.scrollBy({ left: direction * step, behavior: 'smooth' });
-    };
-    var previousButton = document.querySelector('.pcs-arrow--prev');
-    var nextButton = document.querySelector('.pcs-arrow--next');
-    if (previousButton) previousButton.addEventListener('click', function () { scrollCarousel(-1); });
-    if (nextButton) nextButton.addEventListener('click', function () { scrollCarousel(1); });
-    pcGrid.addEventListener('pointerdown', function (event) {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
-      if (event.target.closest('a, button')) return;
-      dragging = true;
-      dragStart = event.clientX;
-      dragScroll = pcGrid.scrollLeft;
-      pcGrid.setPointerCapture(event.pointerId);
-    });
-    pcGrid.addEventListener('pointermove', function (event) {
-      if (!dragging) return;
-      event.preventDefault();
-      pcGrid.scrollLeft = dragScroll - (event.clientX - dragStart);
-    });
-    pcGrid.addEventListener('pointerup', function () {
-      dragging = false;
-    });
-    pcGrid.addEventListener('pointercancel', function () {
-      dragging = false;
-    });
-  }
 
   /* ---- Lead form ---- */
   var form = document.getElementById('leadForm');
