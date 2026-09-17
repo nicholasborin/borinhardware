@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1D1D1F">
+<meta name="theme-color" content="#0B0C0F">
 <title>Borin Hardware | Montagem de PC Gamer e Alta Performance em Bauru-SP</title>
 <meta name="description" content="Montagem de PC Gamer e de alta performance sob medida em Bauru-SP. Consultoria, upgrades, formatação, limpeza e assistência técnica com garantia. Atendimento presencial em Bauru e região, ou remoto para todo o Brasil.">
 <meta name="robots" content="index, follow">
@@ -38,7 +38,7 @@
   "@context": "https://schema.org",
   "@type": "ElectronicsStore",
   "name": "Borin Hardware",
-  "image": "https://borinhardware.com/assets/logofull.png",
+  "image": "https://borinhardware.com/assets/blacklogo.png",
   "url": "https://borinhardware.com/",
   "telephone": "+5514997855014",
   "priceRange": "$$",
@@ -124,14 +124,23 @@
    grandes sem precisar de várias media queries redundantes.
 ========================================================= */
 :root {
-  --color-primary: #1D1D1F;
-  --color-secondary: #6E6E73;
-  --color-background: #FFFFFF;
-  --color-surface: #F5F5F7;
-  --color-surface-strong: #E8E8ED;
-  --color-accent: #0071E3;
-  --color-accent-hover: #0077ED;
+  /* Tema escuro (padrão) */
+  --color-primary: #F5F5F7;
+  --color-secondary: #98989D;
+  --color-background: #0B0C0F;
+  --color-surface: #16171B;
+  --color-surface-strong: #272930;
+  --color-accent: #2997FF;
+  --color-accent-hover: #55ABFF;
   --color-inverse: #FFFFFF;
+  --color-contrast-bg: #1A1C22;
+  --color-contrast-text: #FFFFFF;
+  --color-nav-bg: rgba(11,12,15,0.72);
+  --glow-rgb: 41,151,255;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.5);
+  --shadow-hover: 0 12px 32px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05);
+  --shadow-floating: 0 20px 60px rgba(0,0,0,.6);
 
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
@@ -166,10 +175,6 @@
   --radius-2xl: 40px;
   --radius-pill: 999px;
 
-  --shadow-card: 0 1px 2px rgba(0,0,0,.04);
-  --shadow-hover: 0 12px 32px rgba(0,0,0,.08);
-  --shadow-floating: 0 20px 50px rgba(0,0,0,.12);
-
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   --ease-in-out: cubic-bezier(.65, 0, .35, 1);
   --duration-fast: 180ms;
@@ -177,6 +182,26 @@
   --duration-slow: 700ms;
 
   --navbar-h: 108px;
+}
+
+/* Tema claro (alternativa via botão no menu) */
+:root[data-theme="light"] {
+  --color-primary: #1D1D1F;
+  --color-secondary: #6E6E73;
+  --color-background: #FFFFFF;
+  --color-surface: #F5F5F7;
+  --color-surface-strong: #E8E8ED;
+  --color-accent: #0071E3;
+  --color-accent-hover: #0077ED;
+  --color-inverse: #FFFFFF;
+  --color-contrast-bg: #1D1D1F;
+  --color-contrast-text: #FFFFFF;
+  --color-nav-bg: rgba(255,255,255,0.8);
+  --glow-rgb: 0,113,227;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.04);
+  --shadow-hover: 0 12px 32px rgba(0,0,0,.08);
+  --shadow-floating: 0 20px 50px rgba(0,0,0,.12);
 }
 
 /* =========================================================
@@ -190,10 +215,12 @@ body {
   background: var(--color-background);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background-color var(--duration-normal) var(--ease-out),
+              color var(--duration-normal) var(--ease-out);
 }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 ul { list-style: none; }
 input, select { font-family: inherit; }
 
@@ -296,6 +323,52 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 .btn--block { width: 100%; }
 
 /* =========================================================
+   INTERACTIVE CARDS — tilt 3D + brilho ao passar o mouse
+   Aplicado via classe .tilt-card (JS controla --mx/--my/rotação)
+========================================================= */
+.tilt-card {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease-out,
+              box-shadow var(--duration-normal) var(--ease-out),
+              background-color var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) var(--ease-out);
+}
+.tilt-card:hover,
+.tilt-card.is-tilting {
+  z-index: 5;
+}
+.tilt-card .benefit-card__icon,
+.tilt-card .pc-spec-item__icon,
+.tilt-card .config-card__badge,
+.tilt-card .process-step__num {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.tilt-card:hover .benefit-card__icon,
+.tilt-card:hover .pc-spec-item__icon,
+.tilt-card:hover .config-card__badge,
+.tilt-card:hover .process-step__num {
+  transform: scale(1.12);
+}
+.tilt-card > * { position: relative; z-index: 1; }
+.tilt-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--glow-rgb), 0.28), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+  pointer-events: none;
+}
+.tilt-card:hover::before,
+.tilt-card.is-tilting::before { opacity: 1; }
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .tilt-card { transform: none !important; }
+}
+
+/* =========================================================
    NAVBAR
    Base = menu hambúrguer. Nav completa só em telas grandes.
 ========================================================= */
@@ -303,11 +376,12 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: rgba(255,255,255,0.8);
+  background: var(--color-nav-bg);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid transparent;
-  transition: border-color var(--duration-normal) var(--ease-out);
+  transition: border-color var(--duration-normal) var(--ease-out),
+              background-color var(--duration-normal) var(--ease-out);
 }
 .navbar.is-scrolled { border-bottom-color: var(--color-surface-strong); }
 .navbar__inner {
@@ -340,6 +414,32 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   object-position: center;
   flex-shrink: 0;
 }
+.logo-mark--light { display: none; }
+:root[data-theme="light"] .logo-mark--dark { display: none; }
+:root[data-theme="light"] .logo-mark--light { display: block; }
+
+/* =========================================================
+   THEME TOGGLE
+========================================================= */
+.theme-toggle {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-strong);
+  transition: background-color var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+.theme-toggle:hover { transform: scale(1.08); border-color: var(--color-accent); }
+.theme-toggle__icon { width: 18px; height: 18px; color: var(--color-primary); }
+.theme-toggle__icon--moon { display: none; }
+:root[data-theme="light"] .theme-toggle__icon--sun { display: none; }
+:root[data-theme="light"] .theme-toggle__icon--moon { display: block; }
 .nav-links { display: none; }
 .nav-links a {
   position: relative;
@@ -407,12 +507,13 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
    HERO
 ========================================================= */
 .hero {
+  position: relative;
   padding: calc(var(--navbar-h) + var(--space-8)) 0 var(--space-8);
-  background: linear-gradient(180deg, #FFFFFF 0%, var(--color-surface) 100%);
+  background: linear-gradient(180deg, var(--color-background) 0%, var(--color-surface) 100%);
   text-align: center;
   overflow: hidden;
 }
-.hero__inner { max-width: 760px; margin: 0 auto; }
+.hero__inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
 .hero h1 {
   font-size: var(--text-display);
   margin-bottom: var(--space-5);
@@ -502,7 +603,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   overflow: hidden;
   transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
 }
-.pc-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.pc-card:hover { box-shadow: var(--shadow-hover); }
 .pc-art {
   min-height: 0;
   aspect-ratio: 4 / 3;
@@ -547,7 +648,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   border-radius: var(--radius-lg);
   transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
 }
-.pc-spec-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.pc-spec-item:hover { box-shadow: var(--shadow-hover); }
 .pc-spec-item__icon {
   flex: 0 0 auto;
   width: 44px;
@@ -589,7 +690,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 }
 .benefit-card:hover {
   box-shadow: var(--shadow-hover);
-  transform: translateY(-4px);
 }
 .benefit-card__icon {
   width: 56px; height: 56px;
@@ -613,7 +713,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 /* =========================================================
    PROCESS
 ========================================================= */
-.process { background: var(--color-primary); color: var(--color-inverse); }
+.process { background: var(--color-contrast-bg); color: var(--color-contrast-text); }
 .process .section-head h2 { color: var(--color-inverse); }
 .process .section-head p { color: rgba(255,255,255,0.6); }
 .process-grid {
@@ -629,14 +729,14 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+  transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), transform 0.2s var(--ease-out);
 }
 .process-step:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
 .process-step__num {
   width: 40px; height: 40px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: var(--color-primary);
+  background: var(--color-contrast-bg);
   border: 1px solid rgba(255,255,255,0.18);
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display);
@@ -672,14 +772,14 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
               transform var(--duration-normal) var(--ease-out),
               border-color var(--duration-normal) var(--ease-out);
 }
-.config-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+.config-card:hover { box-shadow: var(--shadow-hover); }
 .config-card--featured {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--color-contrast-bg);
+  border-color: var(--color-contrast-bg);
   box-shadow: var(--shadow-floating);
   order: -1;
 }
-.config-card--featured:hover { transform: translateY(-4px); }
+.config-card--featured:hover { box-shadow: 0 24px 60px rgba(0,0,0,.5); }
 .config-card--featured h3, .config-card--featured h4 { color: var(--color-inverse); }
 .config-card--featured .config-card__tagline { color: rgba(255,255,255,0.55); }
 .config-card--featured .spec-list li { color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.12); }
@@ -1031,7 +1131,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   .configs-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-5); max-width: none; margin: 0; }
   .config-card { padding: var(--space-7) var(--space-6); }
   .config-card--featured { order: 0; transform: scale(1.03); }
-  .config-card--featured:hover { transform: scale(1.03) translateY(-4px); }
+  .config-card--featured:hover { box-shadow: 0 24px 60px rgba(0,0,0,.5); }
 
   .cta-final__grid { grid-template-columns: 1fr 1fr; gap: var(--space-11); }
 }
@@ -1054,7 +1154,10 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 ========================================================= -->
 <header class="navbar" id="navbar">
   <div class="wrap navbar__inner">
-    <a href="#top" class="logo"><img class="logo-mark" src="assets/logofull.png" alt="Borin Hardware" width="190" height="90"></a>
+    <a href="#top" class="logo">
+      <img class="logo-mark logo-mark--dark" src="assets/whitelogo.png" alt="Borin Hardware" width="190" height="90">
+      <img class="logo-mark logo-mark--light" src="assets/blacklogo.png" alt="Borin Hardware" width="190" height="90">
+    </a>
     <nav class="nav-links" aria-label="Navegação principal">
       <a href="#beneficios">Sobre</a>
       <a href="#como-funciona">Como funciona</a>
@@ -1064,6 +1167,10 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
       <span></span><span></span>
+    </button>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar para tema claro" aria-pressed="false">
+      <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
     </button>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação mobile">
@@ -1127,7 +1234,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <p class="lead">PCs Gamer e de alta performance montados pela Borin Hardware em Bauru-SP.</p>
     </div>
     <div class="pcs-showcase-grid">
-      <article class="pc-card reveal">
+      <article class="pc-card reveal tilt-card">
         <div class="pc-art pc-art--photo">
           <img src="assets/pc1.png" alt="PC Gamer branco montado pela Borin Hardware em Bauru, com iluminação branca e placa de vídeo RTX 5070" loading="lazy" decoding="async">
         </div>
@@ -1141,7 +1248,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <div class="pcs-spec-list reveal">
         <p class="pcs-spec-list__head">Outras configurações recentes</p>
         <ul>
-          <li class="pc-spec-item">
+          <li class="pc-spec-item tilt-card">
             <div class="pc-spec-item__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
             </div>
@@ -1151,7 +1258,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
               <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
             </div>
           </li>
-          <li class="pc-spec-item">
+          <li class="pc-spec-item tilt-card">
             <div class="pc-spec-item__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
             </div>
@@ -1161,7 +1268,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
               <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#138" data-specs="AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB" target="_blank" rel="noopener">Montar um igual</a>
             </div>
           </li>
-          <li class="pc-spec-item">
+          <li class="pc-spec-item tilt-card">
             <div class="pc-spec-item__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
             </div>
@@ -1170,7 +1277,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
               <p>AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB</p>
               <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#86" data-specs="AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB" target="_blank" rel="noopener">Montar um igual</a>
             </div>
-          </li><li class="pc-spec-item">
+          </li><li class="pc-spec-item tilt-card">
             <div class="pc-spec-item__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
             </div>
@@ -1196,28 +1303,28 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <p class="lead">Você conta o que precisa e recebe orientação para montar uma máquina coerente, bem montada e pronta para o seu uso.</p>
     </div>
     <div class="benefits-grid">
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#0071E3" stroke-width="2"/></svg>
         </div>
         <h4>Consultoria personalizada</h4>
         <p>Definição da configuração ideal para seus jogos, trabalho ou criação de conteúdo.</p>
       </div>
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="#0071E3" stroke-width="2"/></svg>
         </div>
         <h4>Cotação das peças</h4>
         <p>Pesquisa dos componentes nas principais lojas de hardware, buscando boas opções de preço, qualidade e disponibilidade.</p>
       </div>
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#0071E3" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
         <h4>Montagem e preparação</h4>
         <p>Montagem completa do PC, com testes, Windows licenciado, atualizações e drivers instalados antes da entrega.</p>
       </div>
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
@@ -1226,21 +1333,21 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       </div>
     </div>
     <div class="delivery-grid">
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7.5L12 3l8 4.5v9L12 21l-8-4.5v-9z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M4 7.5L12 12l8-4.5M12 12v9" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
         <h4>Embalagens e acessórios</h4>
         <p>Todas as embalagens originais, acessórios e itens extras acompanham o PC.</p>
       </div>
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h4>Seguro no transporte</h4>
         <p>Quando enviado por transportadora, o PC segue com seguro sobre o valor total das peças.</p>
       </div>
-      <div class="benefit-card reveal">
+      <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="#0071E3" stroke-width="2"/></svg>
         </div>
@@ -1261,32 +1368,32 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <p>Do primeiro contato até a entrega, acompanhamos cada etapa do seu projeto.</p>
     </div>
     <div class="process-grid">
-      <div class="process-step reveal">
+      <div class="process-step reveal tilt-card">
         <span class="process-step__num">1</span>
         <h4>Conte seus objetivos</h4>
         <p>Você entra em contato e explica como pretende usar o computador, seus jogos e suas necessidades.</p>
       </div>
-      <div class="process-step reveal">
+      <div class="process-step reveal tilt-card">
         <span class="process-step__num">2</span>
         <h4>Definição da configuração</h4>
         <p>A partir do que você procura, definimos os componentes que melhor atendem ao seu projeto e orçamento.</p>
       </div>
-      <div class="process-step reveal">
+      <div class="process-step reveal tilt-card">
         <span class="process-step__num">3</span>
         <h4>Compra das peças</h4>
         <p>Após definirmos a configuração, indicamos as melhores opções de compra nas principais lojas de hardware.</p>
       </div>
-      <div class="process-step reveal">
+      <div class="process-step reveal tilt-card">
         <span class="process-step__num">4</span>
         <h4>Montagem e testes</h4>
         <p>Com todas as peças em mãos, realizamos a montagem, os testes e a preparação do PC para a entrega.</p>
       </div>
-      <div class="process-step reveal">
+      <div class="process-step reveal tilt-card">
         <span class="process-step__num">5</span>
         <h4>Entrega em Bauru e região</h4>
         <p>Entregamos o PC pessoalmente, com tudo preparado para você começar a utilizá-lo.</p>
       </div>
-      <div class="process-step reveal">
+      <div class="process-step reveal tilt-card">
         <span class="process-step__num">6</span>
         <h4>Envio para todo o Brasil</h4>
         <p>Para outras regiões, enviamos o PC por transportadora, com seguro sobre o valor total das peças.</p>
@@ -1305,7 +1412,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       <p class="lead">Se você já tem um computador, também fazemos upgrades, formatação, limpeza e identificamos problemas de funcionamento, com atendimento em Bauru-SP e região.</p>
     </div>
     <div class="configs-grid">
-      <div class="config-card reveal">
+      <div class="config-card reveal tilt-card">
         <span class="config-card__badge">Evolução</span>
         <h3>Upgrade planejado</h3>
         <p class="config-card__tagline">Mais desempenho sem trocar o que ainda funciona</p>
@@ -1317,7 +1424,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
         </ul>
         <a href="https://wa.me/5514997855014?text=Ol%C3%A1%2C%20Borin%20Hardware!%20Quero%20planejar%20um%20upgrade%20no%20meu%20PC%20(troca%20de%20placa%20de%20v%C3%ADdeo%2C%20SSD%2C%20water%20cooler%20ou%20avalia%C3%A7%C3%A3o%20de%20compatibilidade)." class="btn btn--ghost btn--block" target="_blank" rel="noopener">Planejar meu upgrade</a>
       </div>
-      <div class="config-card config-card--featured reveal">
+      <div class="config-card config-card--featured reveal tilt-card">
         <span class="config-card__badge">Manutenção</span>
         <h3>Formatação e limpeza</h3>
         <p class="config-card__tagline">Deixe seu computador organizado e pronto para usar</p>
@@ -1329,7 +1436,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
         </ul>
         <a href="https://wa.me/5514997855014?text=Ol%C3%A1%2C%20Borin%20Hardware!%20Quero%20fazer%20manuten%C3%A7%C3%A3o%20no%20meu%20PC%20(formata%C3%A7%C3%A3o%2C%20limpeza%20interna%2C%20atualiza%C3%A7%C3%B5es%20e%20instala%C3%A7%C3%A3o%20de%20programas)." class="btn btn--primary btn--block" target="_blank" rel="noopener">Quero fazer manutenção</a>
       </div>
-      <div class="config-card reveal">
+      <div class="config-card reveal tilt-card">
         <span class="config-card__badge">Acompanhamento</span>
         <h3>Assistência técnica</h3>
         <p class="config-card__tagline">Identificação de falhas e manutenção do seu computador</p>
@@ -1578,6 +1685,70 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   var isMobile = window.matchMedia('(max-width: 767px)').matches;
   var hasGSAP = typeof gsap !== 'undefined';
 
+  /* ---- Tema escuro/claro ---- */
+  var root = document.documentElement;
+  var themeToggle = document.getElementById('themeToggle');
+  var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  var THEME_KEY = 'bh-theme';
+
+  function setMetaThemeColor() {
+    if (!metaThemeColor) return;
+    metaThemeColor.setAttribute('content', root.getAttribute('data-theme') === 'light' ? '#FFFFFF' : '#0B0C0F');
+  }
+  try {
+    if (localStorage.getItem(THEME_KEY) === 'light') {
+      root.setAttribute('data-theme', 'light');
+    }
+  } catch (e) { /* localStorage indisponível: mantém o tema escuro padrão */ }
+  setMetaThemeColor();
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'light' ? 'true' : 'false');
+    themeToggle.addEventListener('click', function () {
+      var goingLight = root.getAttribute('data-theme') !== 'light';
+      if (goingLight) {
+        root.setAttribute('data-theme', 'light');
+        themeToggle.setAttribute('aria-label', 'Alternar para tema escuro');
+      } else {
+        root.removeAttribute('data-theme');
+        themeToggle.setAttribute('aria-label', 'Alternar para tema claro');
+      }
+      themeToggle.setAttribute('aria-pressed', goingLight ? 'true' : 'false');
+      try { localStorage.setItem(THEME_KEY, goingLight ? 'light' : 'dark'); } catch (e) {}
+      setMetaThemeColor();
+    });
+  }
+
+  /* ---- Escala + giro leve + brilho, seguindo o mouse ---- */
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (canHover && !reduceMotion) {
+    document.querySelectorAll('.tilt-card').forEach(function (card) {
+      var isFeatured = card.classList.contains('config-card--featured');
+      var scale = isFeatured ? 1.05 : 1.035;
+      var maxTilt = 5;
+      /* Cards sem a classe "reveal" (ex: specs) não são animados pelo GSAP
+         ao rolar, então já podem reagir ao hover desde já. */
+      if (!card.classList.contains('reveal')) card.classList.add('is-revealed');
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width;
+        var py = (e.clientY - rect.top) / rect.height;
+        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+        card.classList.add('is-tilting');
+        /* Só aplica a rotação/escala se a animação de entrada já terminou,
+           pra não disputar o transform com o GSAP (era isso que causava
+           o "desce e depois sobe" na primeira passada do mouse). */
+        if (!card.classList.contains('is-revealed')) return;
+        var rotateY = (px - 0.5) * maxTilt * 2;
+        card.style.transform = 'scale(' + scale + ') perspective(1400px) rotateY(' + rotateY.toFixed(2) + 'deg)';
+      });
+      card.addEventListener('mouseleave', function () {
+        card.classList.remove('is-tilting');
+        if (card.classList.contains('is-revealed')) card.style.transform = '';
+      });
+    });
+  }
+
   /* ---- Navbar scroll state ---- */
   var navbar = document.getElementById('navbar');
   var onScroll = function () {
@@ -1687,16 +1858,52 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       groups.forEach(function (section) {
         var items = section.querySelectorAll('.reveal');
         if (!items.length) return;
-        gsap.set(items, { opacity: 0, y: isMobile ? 16 : 24 });
+        gsap.set(items, { opacity: 0, y: isMobile ? 16 : 28, scale: isMobile ? 1 : 0.97 });
         gsap.to(items, {
-          opacity: 1, y: 0,
-          duration: isMobile ? 0.5 : 0.7,
-          stagger: isMobile ? 0.04 : 0.08,
-          ease: 'power2.out',
+          opacity: 1, y: 0, scale: 1,
+          duration: isMobile ? 0.55 : 0.85,
+          stagger: isMobile ? 0.045 : 0.09,
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: section,
             start: 'top 80%',
             once: true
+          },
+          onComplete: function () {
+            /* Libera o transform desses itens (limpando o inline style do GSAP)
+               pra não disputar com o efeito de hover/tilt nos cards */
+            items.forEach(function (el) {
+              gsap.set(el, { clearProps: 'transform' });
+              el.classList.add('is-revealed');
+            });
+          }
+        });
+      });
+
+      /* Contadores numéricos animados (ex: "10 anos", "100%") */
+      document.querySelectorAll('.stat__value').forEach(function (el) {
+        var match = el.textContent.match(/\d+/);
+        if (!match) return;
+        var target = parseInt(match[0], 10);
+        var prefix = el.textContent.slice(0, match.index);
+        var suffix = el.textContent.slice(match.index + match[0].length);
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+          onEnter: function () {
+            var counter = { val: 0 };
+            gsap.to(counter, {
+              val: target,
+              duration: 1.3,
+              ease: 'power1.out',
+              onUpdate: function () {
+                el.textContent = prefix + Math.round(counter.val) + suffix;
+              },
+              onComplete: function () {
+                el.textContent = prefix + target + suffix;
+              }
+            });
           }
         });
       });
