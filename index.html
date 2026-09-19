@@ -136,7 +136,7 @@
   --color-contrast-bg: #1A1C22;
   --color-contrast-text: #FFFFFF;
   --color-nav-bg: rgba(11,12,15,0.72);
-  --glow-rgb: 41,151,255;
+  --color-accent-rgb: 41,151,255;
 
   --shadow-card: 0 1px 2px rgba(0,0,0,.5);
   --shadow-hover: 0 12px 32px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05);
@@ -149,6 +149,7 @@
   --text-h2: clamp(28px, 5.2vw, 48px);
   --text-h3: clamp(22px, 4.4vw, 32px);
   --text-h4: clamp(18px, 2.6vw, 24px);
+  --text-h5: 16px;
   --text-body-lg: clamp(17px, 2.3vw, 21px);
   --text-body: 17px;
   --text-body-sm: 15px;
@@ -197,7 +198,7 @@
   --color-contrast-bg: #1D1D1F;
   --color-contrast-text: #FFFFFF;
   --color-nav-bg: rgba(255,255,255,0.8);
-  --glow-rgb: 0,113,227;
+  --color-accent-rgb: 0,113,227;
 
   --shadow-card: 0 1px 2px rgba(0,0,0,.04);
   --shadow-hover: 0 12px 32px rgba(0,0,0,.08);
@@ -327,12 +328,13 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
    Aplicado via classe .tilt-card (JS controla --mx/--my/rotação)
 ========================================================= */
 .tilt-card {
+  /* Fallback: cada card (.pc-card, .benefit-card, .config-card,
+     .process-step, .pc-spec-item) já define sua própria "transition"
+     completa mais abaixo — essa regra só cobre elementos que ganhem
+     essa classe sem ter uma transição própria. */
   position: relative;
   z-index: 1;
-  transition: transform 0.2s ease-out,
-              box-shadow var(--duration-normal) var(--ease-out),
-              background-color var(--duration-normal) var(--ease-out),
-              border-color var(--duration-normal) var(--ease-out);
+  transition: transform var(--duration-normal) var(--ease-out);
 }
 .tilt-card:hover,
 .tilt-card.is-tilting {
@@ -357,7 +359,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--glow-rgb), 0.28), transparent 70%);
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--color-accent-rgb), 0.28), transparent 70%);
   opacity: 0;
   transition: opacity 0.35s var(--ease-out);
   pointer-events: none;
@@ -402,13 +404,8 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   white-space: nowrap;
   flex-shrink: 0;
 }
-.navbar__inner .logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
 .logo-mark {
-  width: 190px; height: 90px;
+  width: 128px; height: 61px;
   border-radius: 7px;
   object-fit: contain;
   object-position: center;
@@ -461,7 +458,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 }
 .nav-links a:hover { color: var(--color-primary); }
 .nav-links a:hover::after { right: 0; }
-.nav-cta { display: none; }
 .nav-toggle {
   display: block;
   width: 40px; height: 40px;
@@ -531,15 +527,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   margin-bottom: var(--space-6);
 }
 .hero__ctas .btn { width: 100%; }
-.hero__trust {
-  font-size: var(--text-caption);
-  color: var(--color-secondary);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-1);
-}
-.hero__trust .dot { display: none; }
 
 /* =========================================================
    STATS STRIP
@@ -566,7 +553,8 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   width: 67px;
   height: 67px;
   border-radius: 50%;
-  background: rgba(0,113,227,0.1);
+  background: rgba(var(--color-accent-rgb), 0.12);
+  color: var(--color-accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -601,7 +589,10 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   border: 1px solid var(--color-surface-strong);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out),
+              background-color var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) var(--ease-out);
 }
 .pc-card:hover { box-shadow: var(--shadow-hover); }
 .pc-art {
@@ -629,7 +620,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 
 .pcs-spec-list__head {
   font-size: var(--text-body-sm);
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-secondary);
   margin-bottom: var(--space-4);
 }
 .pcs-spec-list ul {
@@ -646,22 +637,25 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   background: var(--color-background);
   border: 1px solid var(--color-surface-strong);
   border-radius: var(--radius-lg);
-  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out),
+              background-color var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) var(--ease-out);
 }
 .pc-spec-item:hover { box-shadow: var(--shadow-hover); }
 .pc-spec-item__icon {
   flex: 0 0 auto;
   width: 44px;
   height: 44px;
-  border-radius: var(--radius-md, 12px);
+  border-radius: var(--radius-md);
   background: linear-gradient(145deg, #17191d, #2f4a64);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .pc-spec-item__body { flex: 1; min-width: 0; }
-.pc-spec-item__body h4 { font-size: var(--text-h5, 1rem); margin-bottom: 2px; }
-.pc-spec-item__body p { font-size: var(--text-body-sm); color: var(--color-text-muted, #6b7280); margin-bottom: var(--space-2); }
+.pc-spec-item__body h4 { font-size: var(--text-h5); margin-bottom: 2px; }
+.pc-spec-item__body p { font-size: var(--text-body-sm); color: var(--color-secondary); margin-bottom: var(--space-2); }
 .pc-spec-item__link { font-size: var(--text-body-sm); font-weight: 600; color: var(--color-primary); text-decoration: none; }
 .pc-spec-item__link:hover { text-decoration: underline; }
 
@@ -686,7 +680,8 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   flex-direction: column;
   align-items: flex-start;
   transition: box-shadow var(--duration-normal) var(--ease-out),
-              transform var(--duration-normal) var(--ease-out);
+              transform var(--duration-normal) var(--ease-out),
+              background-color var(--duration-normal) var(--ease-out);
 }
 .benefit-card:hover {
   box-shadow: var(--shadow-hover);
@@ -696,6 +691,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   flex-shrink: 0;
   border-radius: var(--radius-sm);
   background: var(--color-background);
+  color: var(--color-accent);
   display: flex; align-items: center; justify-content: center;
   box-shadow: var(--shadow-card);
   margin-bottom: var(--space-4);
@@ -770,6 +766,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   flex-direction: column;
   transition: box-shadow var(--duration-normal) var(--ease-out),
               transform var(--duration-normal) var(--ease-out),
+              background-color var(--duration-normal) var(--ease-out),
               border-color var(--duration-normal) var(--ease-out);
 }
 .config-card:hover { box-shadow: var(--shadow-hover); }
@@ -789,12 +786,12 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   font-size: var(--text-caption);
   font-weight: 600;
   color: var(--color-accent);
-  background: rgba(0,113,227,0.12);
+  background: rgba(var(--color-accent-rgb), 0.14);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
   margin-bottom: var(--space-3);
 }
-.config-card--featured .config-card__badge { background: rgba(0,113,227,0.22); }
+.config-card--featured .config-card__badge { background: rgba(var(--color-accent-rgb), 0.24); }
 .config-card__tagline {
   font-size: var(--text-body-sm);
   color: var(--color-secondary);
@@ -1074,8 +1071,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 @media (min-width: 480px) {
   .hero__ctas { flex-direction: row; justify-content: center; flex-wrap: wrap; width: auto; }
   .hero__ctas .btn { width: auto; }
-  .hero__trust { flex-direction: row; align-items: center; justify-content: center; gap: var(--space-3); flex-wrap: wrap; }
-  .hero__trust .dot { display: inline; opacity: 0.5; }
 }
 
 @media (min-width: 768px) {
@@ -1137,9 +1132,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 }
 
 @media (min-width: 1200px) {
-  .navbar__inner .logo { position: static; transform: none; }
   .nav-links { display: flex; align-items: center; justify-content: center; gap: var(--space-6); flex: 1; }
-  .nav-cta { display: flex; align-items: center; gap: var(--space-4); flex-shrink: 0; }
   .nav-toggle { display: none; }
   .mobile-menu { display: none !important; }
 
@@ -1202,22 +1195,22 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 <section class="stats-strip">
   <div class="wrap">
     <div class="stat">
-      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#0071E3" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="stat__value">Dezenas</div>
       <div class="stat__label">de máquinas entregues</div>
     </div>
     <div class="stat">
-      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#0071E3" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="stat__value">10 anos</div>
       <div class="stat__label">de experiência</div>
     </div>
     <div class="stat">
-      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="stat__value">100%</div>
       <div class="stat__label">dos PCs testados antes da entrega</div>
     </div>
     <div class="stat">
-      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="stat__icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
       <div class="stat__value">1 ano</div>
       <div class="stat__label">de suporte técnico</div>
     </div>
@@ -1305,28 +1298,28 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     <div class="benefits-grid">
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#0071E3" stroke-width="2"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
         </div>
         <h4>Consultoria personalizada</h4>
         <p>Definição da configuração ideal para seus jogos, trabalho ou criação de conteúdo.</p>
       </div>
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="#0071E3" stroke-width="2"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>
         </div>
         <h4>Cotação das peças</h4>
         <p>Pesquisa dos componentes nas principais lojas de hardware, buscando boas opções de preço, qualidade e disponibilidade.</p>
       </div>
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#0071E3" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
         <h4>Montagem e preparação</h4>
         <p>Montagem completa do PC, com testes, Windows licenciado, atualizações e drivers instalados antes da entrega.</p>
       </div>
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V7l7-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
         <h4>Suporte</h4>
         <p>Suporte técnico para orientações, dúvidas e identificação de possíveis falhas durante 1 ano.</p>
@@ -1335,21 +1328,21 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
     <div class="delivery-grid">
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7.5L12 3l8 4.5v9L12 21l-8-4.5v-9z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M4 7.5L12 12l8-4.5M12 12v9" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7.5L12 3l8 4.5v9L12 21l-8-4.5v-9z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 7.5L12 12l8-4.5M12 12v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
         </div>
         <h4>Embalagens e acessórios</h4>
         <p>Todas as embalagens originais, acessórios e itens extras acompanham o PC.</p>
       </div>
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#0071E3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h4>Seguro no transporte</h4>
         <p>Quando enviado por transportadora, o PC segue com seguro sobre o valor total das peças.</p>
       </div>
       <div class="benefit-card reveal tilt-card">
         <div class="benefit-card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z" stroke="#0071E3" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="#0071E3" stroke-width="2"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
         </div>
         <h4>Entrega local</h4>
         <p>Em Bauru e região, entrega do PC montado até você, com orientações iniciais.</p>
@@ -1726,8 +1719,10 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       var scale = isFeatured ? 1.05 : 1.035;
       var maxTilt = 5;
       /* Cards sem a classe "reveal" (ex: specs) não são animados pelo GSAP
-         ao rolar, então já podem reagir ao hover desde já. */
-      if (!card.classList.contains('reveal')) card.classList.add('is-revealed');
+         ao rolar, então já podem reagir ao hover desde já. Se o GSAP não
+         estiver disponível, também libera direto (não haverá animação de
+         entrada disputando o transform). */
+      if (!card.classList.contains('reveal') || !hasGSAP) card.classList.add('is-revealed');
       card.addEventListener('mousemove', function (e) {
         var rect = card.getBoundingClientRect();
         var px = (e.clientX - rect.left) / rect.width;
