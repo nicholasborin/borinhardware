@@ -324,48 +324,32 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 .btn--block { width: 100%; }
 
 /* =========================================================
-   INTERACTIVE CARDS — tilt 3D + brilho ao passar o mouse
-   Aplicado via classe .tilt-card (JS controla --mx/--my/rotação)
+   INTERACTIVE CARDS
+   Aplicado via classe .tilt-card
 ========================================================= */
 .tilt-card {
   /* Fallback: cada card (.pc-card, .benefit-card, .config-card,
-     .process-step, .pc-spec-item) já define sua própria "transition"
+     .process-step) já define sua própria "transition"
      completa mais abaixo — essa regra só cobre elementos que ganhem
      essa classe sem ter uma transição própria. */
   position: relative;
   z-index: 1;
   transition: transform var(--duration-normal) var(--ease-out);
 }
-.tilt-card:hover,
-.tilt-card.is-tilting {
-  z-index: 5;
-}
 .tilt-card .benefit-card__icon,
-.tilt-card .pc-spec-item__icon,
+.tilt-card .pc-art__icon,
 .tilt-card .config-card__badge,
 .tilt-card .process-step__num {
-  transition: transform var(--duration-fast) var(--ease-out);
+  transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 .tilt-card:hover .benefit-card__icon,
-.tilt-card:hover .pc-spec-item__icon,
+.tilt-card:hover .pc-art__icon,
 .tilt-card:hover .config-card__badge,
 .tilt-card:hover .process-step__num {
   transform: scale(1.12);
 }
+.tilt-card:hover .pc-art__icon { color: rgba(255,255,255,.92); }
 .tilt-card > * { position: relative; z-index: 1; }
-.tilt-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--color-accent-rgb), 0.28), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-out);
-  pointer-events: none;
-}
-.tilt-card:hover::before,
-.tilt-card.is-tilting::before { opacity: 1; }
 @media (prefers-reduced-motion: reduce), (hover: none) {
   .tilt-card { transform: none !important; }
 }
@@ -404,8 +388,13 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   white-space: nowrap;
   flex-shrink: 0;
 }
+.navbar__inner .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .logo-mark {
-  width: 128px; height: 61px;
+  width: 190px; height: 90px;
   border-radius: 7px;
   object-fit: contain;
   object-position: center;
@@ -574,15 +563,28 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 /* =========================================================
    PCS MONTADOS
 ========================================================= */
-.pcs-showcase { background: var(--color-surface); }
+.pcs-showcase { background: var(--color-surface); overflow: hidden; }
 .pcs-showcase .section-head { margin-bottom: var(--space-6); }
+
+/* Mobile: carrinho horizontal com scroll-snap, "espiando" o próximo card.
+   Desktop (≥860px): grade fixa, sem scroll. */
 .pcs-showcase-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-6);
-  align-items: start;
+  display: flex;
+  gap: var(--space-4);
+  margin: 0 calc(var(--space-4) * -1);
+  padding: var(--space-1) var(--space-4) var(--space-3);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: var(--space-4);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.pcs-showcase-grid::-webkit-scrollbar { display: none; }
+
 .pc-card {
+  scroll-snap-align: start;
+  flex: 0 0 clamp(248px, 76vw, 300px);
   display: flex;
   flex-direction: column;
   background: var(--color-background);
@@ -595,7 +597,9 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
               border-color var(--duration-normal) var(--ease-out);
 }
 .pc-card:hover { box-shadow: var(--shadow-hover); }
+
 .pc-art {
+  position: relative;
   min-height: 0;
   aspect-ratio: 4 / 3;
   background: linear-gradient(145deg, #17191d, #2f4a64);
@@ -608,59 +612,64 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
   object-position: center;
   background: transparent;
 }
+/* Card sem foto própria: mantém a mesma proporção/altura das fotos,
+   com textura sutil + ícone central, pra ficar tudo alinhado na grade. */
+.pc-art--pattern {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pc-art--pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, transparent 1px, transparent 14px);
+}
+.pc-art__icon { position: relative; color: rgba(255,255,255,.5); }
+
 .pc-card__body {
   display: flex;
   flex: 1;
   flex-direction: column;
   padding: var(--space-5);
 }
-.pc-card h3 { font-size: var(--text-h4); margin-bottom: var(--space-2); }
-.pc-card p { font-size: var(--text-body-sm); margin-bottom: var(--space-5); }
+.pc-card h3 { font-size: var(--text-h4); margin-bottom: var(--space-3); }
 .pc-card .btn { width: 100%; margin-top: auto; }
 
-.pcs-spec-list__head {
-  font-size: var(--text-body-sm);
-  color: var(--color-secondary);
-  margin-bottom: var(--space-4);
-}
-.pcs-spec-list ul {
+.pc-card__specs {
   list-style: none;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
 }
-.pc-spec-item {
+.pc-card__specs li {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  background: var(--color-background);
-  border: 1px solid var(--color-surface-strong);
-  border-radius: var(--radius-lg);
-  transition: transform var(--duration-normal) var(--ease-out),
-              box-shadow var(--duration-normal) var(--ease-out),
-              background-color var(--duration-normal) var(--ease-out),
-              border-color var(--duration-normal) var(--ease-out);
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--color-surface-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-caption);
+  color: var(--color-secondary);
+  white-space: nowrap;
 }
-.pc-spec-item:hover { box-shadow: var(--shadow-hover); }
-.pc-spec-item__icon {
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(145deg, #17191d, #2f4a64);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.pc-card__specs li svg { flex: 0 0 auto; opacity: .85; }
+
+@media (min-width: 768px) {
+  .pcs-showcase-grid { margin: 0 calc(var(--space-5) * -1); padding: var(--space-1) var(--space-5) var(--space-3); scroll-padding-left: var(--space-5); }
 }
-.pc-spec-item__body { flex: 1; min-width: 0; }
-.pc-spec-item__body h4 { font-size: var(--text-h5); margin-bottom: 2px; }
-.pc-spec-item__body p { font-size: var(--text-body-sm); color: var(--color-secondary); margin-bottom: var(--space-2); }
-.pc-spec-item__link { font-size: var(--text-body-sm); font-weight: 600; color: var(--color-primary); text-decoration: none; }
-.pc-spec-item__link:hover { text-decoration: underline; }
 
 @media (min-width: 860px) {
-  .pcs-showcase-grid { grid-template-columns: 1.1fr 0.9fr; }
+  .pcs-showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+  .pc-card { flex: initial; }
 }
 
 /* =========================================================
@@ -1132,6 +1141,7 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
 }
 
 @media (min-width: 1200px) {
+  .navbar__inner .logo { position: static; transform: none; }
   .nav-links { display: flex; align-items: center; justify-content: center; gap: var(--space-6); flex: 1; }
   .nav-toggle { display: none; }
   .mobile-menu { display: none !important; }
@@ -1233,55 +1243,42 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
         </div>
         <div class="pc-card__body">
           <h3>PC#137</h3>
-          <p>AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB.</p>
-          <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#128" data-specs="AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
+          <ul class="pc-card__specs">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Ryzen 9 7900</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="7" width="16" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 15v3M11 15v3M14.5 15v3M18 15v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> 32GB</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="12" r="2.2" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="12" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg> RTX 5070 12GB</li>
+          </ul>
+          <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#137" data-specs="AMD Ryzen 9 7900 | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
         </div>
       </article>
-
-      <div class="pcs-spec-list reveal">
-        <p class="pcs-spec-list__head">Outras configurações recentes</p>
-        <ul>
-          <li class="pc-spec-item tilt-card">
-            <div class="pc-spec-item__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </div>
-            <div class="pc-spec-item__body">
-              <h4>PC#136</h4>
-              <p>AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB</p>
-              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
-            </div>
-          </li>
-          <li class="pc-spec-item tilt-card">
-            <div class="pc-spec-item__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </div>
-            <div class="pc-spec-item__body">
-              <h4>PC#135</h4>
-              <p>AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB</p>
-              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#138" data-specs="AMD Ryzen 5 5500 | Memória 16GB | RTX 5050 8GB" target="_blank" rel="noopener">Montar um igual</a>
-            </div>
-          </li>
-          <li class="pc-spec-item tilt-card">
-            <div class="pc-spec-item__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </div>
-            <div class="pc-spec-item__body">
-              <h4>PC#134</h4>
-              <p>AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB</p>
-              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#86" data-specs="AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB" target="_blank" rel="noopener">Montar um igual</a>
-            </div>
-          </li><li class="pc-spec-item tilt-card">
-            <div class="pc-spec-item__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </div>
-            <div class="pc-spec-item__body">
-              <h4>PC#133</h4>
-              <p>AMD Ryzen 5 5600 | Memória 16GB | RX 7600 8GB</p>
-              <a class="pc-spec-item__link pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#86" data-specs="AMD Ryzen 5 7600 | Memória 16GB | RX 7700 XT 12GB" target="_blank" rel="noopener">Montar um igual</a>
-            </div>
-          </li>
-        </ul>
-      </div>
+      <article class="pc-card reveal tilt-card">
+        <div class="pc-art pc-art--photo">
+          <img src="assets/pc2.png" alt="PC Gamer branco montado pela Borin Hardware em Bauru, com iluminação azul e placa de vídeo Radeon" loading="lazy" decoding="async">
+        </div>
+        <div class="pc-card__body">
+          <h3>PC#133</h3>
+          <ul class="pc-card__specs">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Ryzen 5 5600</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="7" width="16" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 15v3M11 15v3M14.5 15v3M18 15v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> 16GB</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="12" r="2.2" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="12" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg> RX 7600 8GB</li>
+          </ul>
+          <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#133" data-specs="AMD Ryzen 5 5600 | Memória 16GB | RX 7600 8GB" target="_blank" rel="noopener">Montar um igual</a>
+        </div>
+      </article>
+      <article class="pc-card reveal tilt-card">
+        <div class="pc-art pc-art--photo">
+          <img src="assets/pc3.png" alt="PC Gamer preto montado pela Borin Hardware em Bauru, com iluminação azul, water cooler e placa de vídeo GeForce RTX 5070" loading="lazy" decoding="async">
+        </div>
+        <div class="pc-card__body">
+          <h3>PC#136</h3>
+          <ul class="pc-card__specs">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Ryzen 7 7800X3D</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="7" width="16" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 15v3M11 15v3M14.5 15v3M18 15v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> 32GB</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="12" r="2.2" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="12" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg> RTX 5070 12GB</li>
+          </ul>
+          <a class="btn btn--ghost pc-choice-wa" href="https://wa.me/5514997855014" data-pc="PC#136" data-specs="AMD Ryzen 7 7800X3D | Memória 32GB | RTX 5070 12GB" target="_blank" rel="noopener">Montar um igual</a>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -1708,39 +1705,6 @@ p.lead { font-size: var(--text-body-lg); line-height: 1.5; }
       themeToggle.setAttribute('aria-pressed', goingLight ? 'true' : 'false');
       try { localStorage.setItem(THEME_KEY, goingLight ? 'light' : 'dark'); } catch (e) {}
       setMetaThemeColor();
-    });
-  }
-
-  /* ---- Escala + giro leve + brilho, seguindo o mouse ---- */
-  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (canHover && !reduceMotion) {
-    document.querySelectorAll('.tilt-card').forEach(function (card) {
-      var isFeatured = card.classList.contains('config-card--featured');
-      var scale = isFeatured ? 1.05 : 1.035;
-      var maxTilt = 5;
-      /* Cards sem a classe "reveal" (ex: specs) não são animados pelo GSAP
-         ao rolar, então já podem reagir ao hover desde já. Se o GSAP não
-         estiver disponível, também libera direto (não haverá animação de
-         entrada disputando o transform). */
-      if (!card.classList.contains('reveal') || !hasGSAP) card.classList.add('is-revealed');
-      card.addEventListener('mousemove', function (e) {
-        var rect = card.getBoundingClientRect();
-        var px = (e.clientX - rect.left) / rect.width;
-        var py = (e.clientY - rect.top) / rect.height;
-        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-        card.classList.add('is-tilting');
-        /* Só aplica a rotação/escala se a animação de entrada já terminou,
-           pra não disputar o transform com o GSAP (era isso que causava
-           o "desce e depois sobe" na primeira passada do mouse). */
-        if (!card.classList.contains('is-revealed')) return;
-        var rotateY = (px - 0.5) * maxTilt * 2;
-        card.style.transform = 'scale(' + scale + ') perspective(1400px) rotateY(' + rotateY.toFixed(2) + 'deg)';
-      });
-      card.addEventListener('mouseleave', function () {
-        card.classList.remove('is-tilting');
-        if (card.classList.contains('is-revealed')) card.style.transform = '';
-      });
     });
   }
 
